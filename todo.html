@@ -1,0 +1,280 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <div
+      class="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.30),transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.25),transparent_25%),linear-gradient(135deg,_#020617_0%,_#111827_100%)]"
+    >
+      <div
+        class="absolute left-8 top-16 h-40 w-40 rounded-full bg-violet-500/25 blur-3xl anim-float"
+      ></div>
+      <div
+        class="absolute bottom-12 right-10 h-56 w-56 rounded-full bg-cyan-400/20 blur-3xl anim-float-delay"
+      ></div>
+
+      <div
+        class="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8"
+      >
+        <div
+          class="w-full rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl shadow-black/20 backdrop-blur-2xl sm:p-6 lg:p-8"
+        >
+          <div class="flex flex-col gap-6 lg:flex-row">
+            <div
+              class="flex-1 rounded-[1.5rem] border border-white/10 bg-slate-950/40 p-6 sm:p-8"
+            >
+              <div
+                class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
+              >
+                <div class="flex-1">
+                  <div
+                    class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300"
+                  >
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>FocusFlow</span>
+                  </div>
+                  <h1
+                    class="mt-4 text-3xl font-semibold text-white sm:text-4xl"
+                  >
+                    Hello, {{ user }}
+                  </h1>
+                  <p class="mt-3 max-w-xl text-sm leading-7 text-slate-300">
+                    Keep your priorities visible and your mind clear. Add the
+                    next task, finish it, and move forward.
+                  </p>
+                </div>
+                <a
+                  href="{% url 'logout' %}"
+                  class="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/10 p-3 text-slate-100 transition hover:bg-white/20"
+                  title="Logout"
+                >
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+              </div>
+
+              <form
+                method="post"
+                class="mt-6 rounded-[1.25rem] border border-white/10 bg-white/10 p-4 shadow-inner shadow-black/10"
+              >
+                {% csrf_token %}
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+                  <div class="flex-1">
+                    <label class="mb-2 block text-sm font-medium text-slate-200"
+                      >New task</label
+                    >
+                    <input
+                      type="text"
+                      class="w-full rounded-2xl border border-white/10 bg-slate-900/70 py-3 px-4 text-sm text-white outline-none transition focus:border-cyan-400"
+                      name="title"
+                      required
+                      placeholder="Add today's task"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    class="rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                  >
+                    Add task
+                  </button>
+                </div>
+              </form>
+
+              <div
+                class="mt-6 rounded-[1.25rem] border border-white/10 bg-slate-950/40 p-4"
+              >
+                <div class="mb-4 flex items-center justify-between">
+                  <h2 class="text-lg font-semibold text-white">
+                    Today’s tasks
+                  </h2>
+                  <span
+                    id="taskCountBadge"
+                    class="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300"
+                    >0/{{ res|length }} completed</span
+                  >
+                </div>
+
+                <div
+                  class="mb-4 rounded-2xl border border-white/10 bg-white/5 p-3"
+                >
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-slate-300">Completion progress</span>
+                    <span id="progressText" class="font-semibold text-cyan-300"
+                      >0% done</span
+                    >
+                  </div>
+                  <div
+                    class="mt-2 h-2 overflow-hidden rounded-full bg-slate-800"
+                  >
+                    <div
+                      id="progressBar"
+                      class="h-full w-0 rounded-full bg-gradient-to-r from-violet-500 to-cyan-400 transition-all duration-300"
+                    ></div>
+                  </div>
+                </div>
+
+                {% if res %}
+                <div class="space-y-3">
+                  {% for todo in res %}
+                  <div
+                    class="task-card flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3"
+                  >
+                    <div class="flex min-w-0 items-center gap-3">
+                      <input
+                        type="checkbox"
+                        class="task-checkbox h-5 w-5 rounded border-white/20 bg-slate-900 accent-cyan-400"
+                      />
+                      <div
+                        class="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/15 text-sm font-semibold text-cyan-300"
+                      >
+                        {{ forloop.counter }}
+                      </div>
+                      <div class="min-w-0">
+                        <p
+                          class="task-title truncate text-sm font-medium text-white"
+                        >
+                          {{ todo.title }}
+                        </p>
+                        <p class="text-xs text-slate-400">
+                          Task #{{ todo.srno }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <a
+                        href="{% url 'edit_todo' todo.srno %}"
+                        class="rounded-full bg-white/10 p-2 text-sm text-slate-200 transition hover:bg-cyan-400/20 hover:text-cyan-300"
+                        title="Edit task"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </a>
+                      <a
+                        href="{% url 'delete_todo' todo.srno %}"
+                        class="rounded-full bg-white/10 p-2 text-sm text-slate-200 transition hover:bg-rose-400/20 hover:text-rose-300"
+                        title="Delete task"
+                      >
+                        <i class="fa-solid fa-trash"></i>
+                      </a>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                {% else %}
+                <div
+                  class="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-slate-400"
+                >
+                  No tasks yet — add your first priority above.
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div
+              class="w-full max-w-md rounded-[1.5rem] border border-white/10 bg-slate-950/40 p-6 sm:p-8 lg:ml-2"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <p
+                    class="text-sm font-semibold uppercase tracking-[0.3em] text-violet-300"
+                  >
+                    Focus
+                  </p>
+                  <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Today’s focus
+                  </h2>
+                </div>
+                <div
+                  class="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300"
+                >
+                  Calm & clear
+                </div>
+              </div>
+
+              <div class="mt-6 space-y-3">
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p class="text-sm font-semibold text-white">
+                    1. Review your goals
+                  </p>
+                  <p class="mt-1 text-sm text-slate-400">
+                    Pick the most important outcome for the day.
+                  </p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p class="text-sm font-semibold text-white">
+                    2. Finish your main task
+                  </p>
+                  <p class="mt-1 text-sm text-slate-400">
+                    Give your best work a quiet, uninterrupted block.
+                  </p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p class="text-sm font-semibold text-white">
+                    3. Take a short break
+                  </p>
+                  <p class="mt-1 text-sm text-slate-400">
+                    A reset can improve your momentum.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const taskCards = Array.from(document.querySelectorAll(".task-card"));
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const taskCountBadge = document.getElementById("taskCountBadge");
+
+        const updateProgress = () => {
+          const completed = taskCards.filter((card) =>
+            card.classList.contains("is-complete"),
+          ).length;
+          const total = taskCards.length;
+          const percent = total ? Math.round((completed / total) * 100) : 0;
+
+          if (progressBar) {
+            progressBar.style.width = `${percent}%`;
+          }
+
+          if (progressText) {
+            progressText.textContent = `${percent}% done`;
+          }
+
+          if (taskCountBadge) {
+            taskCountBadge.textContent = `${completed}/${total} completed`;
+          }
+        };
+
+        taskCards.forEach((card) => {
+          const checkbox = card.querySelector(".task-checkbox");
+          if (!checkbox) return;
+
+          checkbox.addEventListener("change", () => {
+            card.classList.toggle("is-complete", checkbox.checked);
+            updateProgress();
+          });
+        });
+
+        updateProgress();
+      });
+    </script>
+  </body>
+</html>

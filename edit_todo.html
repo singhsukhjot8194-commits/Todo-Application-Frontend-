@@ -1,0 +1,168 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Todo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <div
+      class="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.30),transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.25),transparent_25%),linear-gradient(135deg,_#020617_0%,_#111827_100%)]"
+    >
+      <div
+        class="absolute left-8 top-16 h-40 w-40 rounded-full bg-violet-500/25 blur-3xl anim-float"
+      ></div>
+      <div
+        class="absolute bottom-12 right-10 h-56 w-56 rounded-full bg-cyan-400/20 blur-3xl anim-float-delay"
+      ></div>
+
+      <div
+        class="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8"
+      >
+        <div
+          class="w-full rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl shadow-black/20 backdrop-blur-2xl sm:p-6 lg:p-8"
+        >
+          <div class="flex flex-col gap-6 lg:flex-row">
+            <div
+              class="flex-1 rounded-[1.5rem] border border-white/10 bg-slate-950/40 p-6 sm:p-8"
+            >
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p
+                    class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300"
+                  >
+                    Edit task
+                  </p>
+                  <h1 class="mt-2 text-3xl font-semibold text-white">
+                    Refine your plan
+                  </h1>
+                  <p class="mt-3 max-w-xl text-sm leading-7 text-slate-300">
+                    Update the task title and keep your list feeling organized
+                    and intentional.
+                  </p>
+                </div>
+                <a
+                  href="{% url 'todo' %}"
+                  class="rounded-full border border-white/10 bg-white/10 p-3 text-slate-100 transition hover:bg-white/20"
+                  title="Back to list"
+                >
+                  <i class="fa-solid fa-arrow-left"></i>
+                </a>
+              </div>
+
+              <form
+                method="post"
+                class="mt-6 rounded-[1.25rem] border border-white/10 bg-white/10 p-4 shadow-inner shadow-black/10"
+              >
+                {% csrf_token %}
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+                  <div class="flex-1">
+                    <label class="mb-2 block text-sm font-medium text-slate-200"
+                      >Task title</label
+                    >
+                    <input
+                      type="text"
+                      class="w-full rounded-2xl border border-white/10 bg-slate-900/70 py-3 px-4 text-sm text-white outline-none transition focus:border-cyan-400"
+                      name="title"
+                      required
+                      placeholder="Update task"
+                      value="{{ obj.title }}"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    class="rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                  >
+                    Update task
+                  </button>
+                </div>
+              </form>
+
+              <div
+                class="mt-6 rounded-[1.25rem] border border-white/10 bg-slate-950/40 p-4"
+              >
+                <div class="mb-4 flex items-center justify-between">
+                  <h2 class="text-lg font-semibold text-white">Current list</h2>
+                  <span
+                    class="rounded-full bg-violet-400/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-violet-300"
+                    >{{ res|length }} tasks</span
+                  >
+                </div>
+
+                <div class="space-y-3">
+                  {% for todo in res %}
+                  <div
+                    class="task-card flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3"
+                  >
+                    <div class="flex min-w-0 items-center gap-3">
+                      <div
+                        class="flex h-9 w-9 items-center justify-center rounded-full bg-violet-400/15 text-sm font-semibold text-violet-300"
+                      >
+                        {{ forloop.counter }}
+                      </div>
+                      <div class="min-w-0">
+                        <p class="truncate text-sm font-medium text-white">
+                          {{ todo.title }}
+                        </p>
+                        <p class="text-xs text-slate-400">
+                          Task #{{ todo.srno }}
+                        </p>
+                      </div>
+                    </div>
+                    <a
+                      href="{% url 'edit_todo' todo.srno %}"
+                      class="rounded-full bg-white/10 p-2 text-sm text-slate-200 transition hover:bg-cyan-400/20 hover:text-cyan-300"
+                      title="Edit task"
+                    >
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="w-full max-w-md rounded-[1.5rem] border border-white/10 bg-slate-950/40 p-6 sm:p-8 lg:ml-2"
+            >
+              <p
+                class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300"
+              >
+                Tips
+              </p>
+              <h2 class="mt-2 text-2xl font-semibold text-white">
+                Keep momentum
+              </h2>
+              <div class="mt-6 space-y-3">
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p class="text-sm font-semibold text-white">Stay specific</p>
+                  <p class="mt-1 text-sm text-slate-400">
+                    A precise title makes your next step feel easy.
+                  </p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p class="text-sm font-semibold text-white">Move forward</p>
+                  <p class="mt-1 text-sm text-slate-400">
+                    Once updated, you can return to your list and continue.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

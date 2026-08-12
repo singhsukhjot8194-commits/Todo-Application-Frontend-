@@ -1,0 +1,130 @@
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #6a5cf6, #1cb5e0);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-login {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.signup-box {
+  width: 100%;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.97);
+  padding: 32px 28px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.heading {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  color: #2d2d2d;
+  margin-bottom: 8px;
+}
+
+.line {
+  height: 3px;
+  width: 70px;
+  background: linear-gradient(90deg, #6a5cf6, #1cb5e0);
+  margin: 0 auto 20px;
+  border-radius: 999px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field b {
+  display: block;
+  margin-bottom: 8px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.inp {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.inp:focus {
+  border-color: #6a5cf6;
+  box-shadow: 0 0 0 3px rgba(106, 92, 246, 0.15);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #6a5cf6, #1cb5e0);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(106, 92, 246, 0.2);
+}
+
+.anc {
+  color: #6a5cf6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.anc:hover {
+  text-decoration: underline;
+}
+
+.helper-text {
+  text-align: center;
+  margin-top: 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.todo-form {
+  margin-top: 8px;
+}
+
+.todo-list-preview {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f7f8ff;
+}
+
+.todo-list-preview ul {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  color: #4b5563;
+}
+
+.todo-list-preview li {
+  margin-bottom: 6px;
+}
